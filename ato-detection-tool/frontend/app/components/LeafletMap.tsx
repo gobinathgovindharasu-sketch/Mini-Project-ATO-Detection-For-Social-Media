@@ -1,15 +1,5 @@
 "use client";
 
-/**
- * LeafletMap — the actual Leaflet map component.
- * This file is dynamically imported by WorldMap.tsx with ssr:false
- * to prevent "Map container is already initialized" errors.
- *
- * Uses vanilla Leaflet (L.map) with useRef and proper cleanup
- * instead of react-leaflet, which doesn't handle React Strict Mode
- * double-mounting correctly.
- */
-
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import type { Session } from "@/lib/api";
@@ -29,7 +19,6 @@ export default function LeafletMap({ sessions }: LeafletMapProps) {
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
-    // Initialize map
     const map = L.map(containerRef.current, {
       center: [20, 0],
       zoom: 2,
@@ -44,26 +33,22 @@ export default function LeafletMap({ sessions }: LeafletMapProps) {
 
     mapRef.current = map;
 
-    // Cleanup on unmount — prevents "already initialized" on re-mount
     return () => {
       map.remove();
       mapRef.current = null;
     };
   }, []);
 
-  // Update markers when sessions change
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
 
-    // Clear existing markers
     map.eachLayer((layer: L.Layer) => {
       if (layer instanceof L.CircleMarker) {
         map.removeLayer(layer);
       }
     });
 
-    // Add new markers
     markers.forEach((session) => {
       const isRisky = session.risk_score >= 0.8;
       const isMedium = session.risk_score >= 0.5 && session.risk_score < 0.8;
@@ -78,7 +63,7 @@ export default function LeafletMap({ sessions }: LeafletMapProps) {
         weight: 1,
       }).addTo(map);
 
-      const popupContent = `
+      marker.bindPopup(`
         <div style="font-size:11px;font-family:monospace;min-width:180px;">
           <div style="font-weight:bold;color:${color};">
             Risk: ${(session.risk_score * 100).toFixed(0)}%
@@ -91,16 +76,9 @@ export default function LeafletMap({ sessions }: LeafletMapProps) {
           <div>Hour: ${session.login_hour}:00</div>
           <div style="color:#888;">${session.xai_reason || ""}</div>
         </div>
-      `;
-
-      marker.bindPopup(popupContent);
+      `);
     });
   }, [markers]);
 
-  return (
-    <div
-      ref={containerRef}
-      style={{ height: "100%", width: "100%" }}
-    />
-  );
+  return <div ref={containerRef} style={{ height: "100%", width: "100%" }} />;
 }

@@ -9,9 +9,6 @@ interface WorldMapProps {
   height?: string;
 }
 
-// Dynamically import the Leaflet map from a separate file (ssr: false).
-// This ensures Leaflet is never loaded on the server and the map container
-// lifecycle is fully managed via useRef + useEffect with proper cleanup.
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
   loading: () => (
