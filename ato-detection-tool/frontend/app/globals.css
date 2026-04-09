@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --ato-black: #0a0a0a;
+  --ato-dark: #111111;
+  --ato-card: #161616;
+  --ato-border: #1e1e1e;
+  --ato-cyan: #00e5ff;
+  --ato-red: #ff1744;
+  --ato-green: #00e676;
+  --ato-yellow: #ffd600;
+  --ato-gray: #8a8a8a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--ato-black);
+  color: #e0e0e0;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Subtle grid pattern background */
+body {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+/* Leaflet overrides for dark mode */
+.leaflet-container {
+  background: #0a0a0a !important;
+}
+.leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.7) contrast(1.2);
+}
+.leaflet-control-zoom a {
+  background: #161616 !important;
+  color: #00e5ff !important;
+  border-color: #1e1e1e !important;
+}
+.leaflet-control-attribution {
+  background: rgba(10,10,10,0.8) !important;
+  color: #555 !important;
+  font-size: 9px !important;
+}
+
+/* Glow effects */
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.3), 0 0 60px rgba(0, 229, 255, 0.1);
+}
+.glow-red {
+  box-shadow: 0 0 20px rgba(255, 23, 68, 0.3), 0 0 60px rgba(255, 23, 68, 0.1);
+}
+.glow-green {
+  box-shadow: 0 0 20px rgba(0, 230, 118, 0.3), 0 0 60px rgba(0, 230, 118, 0.1);
+}
+
+/* Pulse animation for map markers */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+.pulse-marker {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
