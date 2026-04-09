@@ -4,6 +4,10 @@
  * LeafletMap — the actual Leaflet map component.
  * This file is dynamically imported by WorldMap.tsx with ssr:false
  * to prevent "Map container is already initialized" errors.
+ *
+ * Uses vanilla Leaflet (L.map) with useRef and proper cleanup
+ * instead of react-leaflet, which doesn't handle React Strict Mode
+ * double-mounting correctly.
  */
 
 import { useEffect, useRef } from "react";
@@ -78,7 +82,7 @@ export default function LeafletMap({ sessions }: LeafletMapProps) {
         <div style="font-size:11px;font-family:monospace;min-width:180px;">
           <div style="font-weight:bold;color:${color};">
             Risk: ${(session.risk_score * 100).toFixed(0)}%
-            ${session.is_takeover ? " — TAKEOVER" : ""}
+            ${session.is_takeover ? " \u2014 TAKEOVER" : ""}
           </div>
           ${session.username ? `<div>@${session.username} (${session.platform})</div>` : ""}
           <div>IP: ${session.ip}</div>
